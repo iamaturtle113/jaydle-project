@@ -15,12 +15,15 @@ import java.awt.event.ActionListener;
 import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.lang.Process;
 import java.lang.Runtime;
 import java.util.*;
 import javax.security.auth.callback.TextOutputCallback;
+import javax.sql.rowset.serial.SerialJavaObject;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -52,8 +55,25 @@ public class JaydlePrototype extends JFrame
 	 static File saveDirectory; 
 	 static ProcessBuilder pbNew;
 	 static String saveDirString=System.getProperty("user.home");//use home dir
+	 static saveDirClass serObj=new saveDirClass();
+	 static File jaydleSerFile=new File("jaydle.ser");
 
 	 //static File dir=new File ("");
+	 
+	 public static class saveDirClass implements Serializable // Named as serObj instance  
+	 {
+		  private File saveDirSerializable;
+		  
+		  public void setPath(File path)
+		  {
+			  saveDirSerializable=path;
+		  }
+		  
+		  public File getPath()
+		  {
+			  return saveDirSerializable;
+		  }
+	 }
 	
 	public class BackgroundTask extends SwingWorker<Integer, String>
 	{
@@ -185,7 +205,9 @@ public class JaydlePrototype extends JFrame
 				new JaydlePrototype().initGuiApp();
 			}
 		});
+		
 		saveDirectory=new File(saveDirString);
+		serObj.setPath(saveDirectory);
         Properties properties = System.getProperties();
         properties.list(System.out);
 		
@@ -257,6 +279,16 @@ public class JaydlePrototype extends JFrame
 			 {
 				 saveDirectory = filechooser.getSelectedFile();
 				 saveDirString=filechooser.getSelectedFile().toString();
+				 serObj.setPath(saveDirectory);
+				 try
+				 {
+					 println(serObj.getPath().toString());
+					 store(serObj, jaydleSerFile);
+				 }
+				 catch(IOException ex)
+				 {
+					 println("IOException, jaydle.ser around wrong...");
+				 }
 			//  label.setText(file.getName());
 			//  text2.setText(jcat2(file.getAbsolutePath()));
 			//  println(jcat2(file.getAbsolutePath()));
