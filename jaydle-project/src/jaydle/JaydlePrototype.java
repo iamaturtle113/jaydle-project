@@ -57,6 +57,8 @@ public class JaydlePrototype extends JFrame
 	 static String saveDirString=System.getProperty("user.home");//use home dir
 	 static saveDirClass serObj=new saveDirClass();
 	 static File jaydleSerFile=new File("jaydle.ser");
+	 
+	// serObj=load("jaydle.ser");
 
 	 //static File dir=new File ("");
 	 
@@ -205,9 +207,26 @@ public class JaydlePrototype extends JFrame
 				new JaydlePrototype().initGuiApp();
 			}
 		});
+		try
+		{
+		File serFile=new File("jaydle.ser");
+		serObj=(saveDirClass) load(serFile);
+		saveDirectory=serObj.getPath();
+		println("Return of serObj.getPath().toString() "+serObj.getPath().toString());
+		}
+		catch (IOException exc)
+		{
+			println("IOE");
+		}
+		catch (ClassNotFoundException exc2)
+		{
+			println("CNFE");
+		}
+		println("Return of serObj.getPath().toString() "+serObj.getPath().toString());
+		//saveDirectory=new File(saveDirString);
+		//serObj.setPath(saveDirectory);
+		//serObj.setPath(serObj.getPath()); //saveDirSeriarizable
 		
-		saveDirectory=new File(saveDirString);
-		serObj.setPath(saveDirectory);
         Properties properties = System.getProperties();
         properties.list(System.out);
 		
@@ -282,7 +301,7 @@ public class JaydlePrototype extends JFrame
 				 serObj.setPath(saveDirectory);
 				 try
 				 {
-					 println(serObj.getPath().toString());
+					 println("serObj.getPath().toString returns "+serObj.getPath().toString());
 					 store(serObj, jaydleSerFile);
 				 }
 				 catch(IOException ex)
@@ -316,7 +335,7 @@ public class JaydlePrototype extends JFrame
 				//saveDirectory=pbNew.directory();
 					//println("saveDirectory is "+saveDirectory.toString()); This statement made error.
 				//saveDirectory.toString(); this also bad.
-					textOut.append(saveDirString+"\n");
+					textOut.append(serObj.getPath().toString()+"\n");
 			}
 			catch(NullPointerException exc){
 			    println("File type something null pointer.");

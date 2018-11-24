@@ -97,6 +97,15 @@ public class Utilities {
 		}
 	}
 	
+	public static Object load(File file) throws IOException, ClassNotFoundException
+	{
+		FileInputStream fis=new FileInputStream(file);
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		//serializableObject myBoxAgain = (SerializationPractice01) ois.readObject();
+		return ois.readObject();
+		
+		//println("Read from serialized file \"bar.ser\" " + myBoxAgain.getWidth());
+	}
 	//テスト用のメインメソッド
 	public static void main(String[] args) {
 		//jcat("/home/masa/test.txt");
