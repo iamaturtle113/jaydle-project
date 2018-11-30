@@ -57,6 +57,7 @@ public class JaydlePrototype extends JFrame
 	 static String saveDirString=System.getProperty("user.home");//use home dir
 	 static saveDirClass serObj=new saveDirClass();
 	 static File jaydleSerFile=new File("jaydle.ser");
+//
 	 
 	// serObj=load("jaydle.ser");
 
@@ -201,6 +202,8 @@ public class JaydlePrototype extends JFrame
 		//BackgroundTask<Integer,String> bgt=new BackgroundTask<Integer,String>();
 		//guiApp.initGuiApp();
 		//bgt.execute();
+		
+		
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -209,10 +212,20 @@ public class JaydlePrototype extends JFrame
 		});
 		try
 		{
-		File serFile=new File("jaydle.ser");
-		serObj=(saveDirClass) load(serFile);
-		saveDirectory=serObj.getPath();
-		println("Return of serObj.getPath().toString() "+serObj.getPath().toString());
+			File serFile=new File("jaydle.ser");
+// If file exists, load past data and substitute to saveDirectory.
+// else make file.
+			
+			if(serFile.exists())
+			{
+				serObj=(saveDirClass) load(serFile);
+				saveDirectory=serObj.getPath();
+				println("Return of serObj.getPath().toString() "+serObj.getPath().toString());
+			}
+			else
+			{
+				serFile.createNewFile();
+			}
 		}
 		catch (IOException exc)
 		{
