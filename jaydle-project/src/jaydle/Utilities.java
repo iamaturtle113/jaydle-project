@@ -109,6 +109,6 @@ public class Utilities {
 	//テスト用のメインメソッド
 	public static void main(String[] args) {
 		//jcat("/home/masa/test.txt");
-		//jls("/home/masa");
+		jls("/home/masa");
 	}
 }
