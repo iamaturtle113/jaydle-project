@@ -255,10 +255,16 @@ public class JaydlePrototype extends JFrame
 		menuBar.add(menu1);
 		JMenuItem menuItem1=new JMenuItem("Change save directory");
 		JMenuItem menuItem2Display=new JMenuItem("Display current saving directory");
+		JMenuItem menuItem3ClearDisplay=new JMenuItem("Clear Display");
+		JMenuItem menuItem4ListDirectory=new JMenuItem("List Directory");
 		menu1.add(menuItem1);
 		menu1.add(menuItem2Display);
+		menu1.add(menuItem3ClearDisplay);
+		menu1.add(menuItem4ListDirectory);
 		menuItem1.addActionListener(new MenuListenerSaveDir());
 		menuItem2Display.addActionListener(new MenuListenerDisplayCurrentDir());
+		menuItem3ClearDisplay.addActionListener(new MenuListenerClearDisplay());
+		menuItem4ListDirectory.addActionListener(new MenuListenerListDirectory());
 		frame.setJMenuBar(menuBar);
 		
 		textOut.setLineWrap(true);
@@ -359,6 +365,70 @@ public class JaydlePrototype extends JFrame
 		}
 	}
 
+	class MenuListenerClearDisplay implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			println("Clear Display command clicked!"); 
+			try
+			{
+				textOut.selectAll();
+				textOut.replaceSelection("");
+			}
+			catch(NullPointerException exc)
+			{
+			    println("File type something null pointer.");
+				exc.printStackTrace();
+			}
+
+
+		}
+	}
+	
+	class MenuListenerListDirectory implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			println("List Directory command clicked!"); 
+			try
+			{
+				jls(saveDirString);
+			}
+			catch(NullPointerException exc)
+			{
+			    println("File type something null pointer.");
+				exc.printStackTrace();
+			}
+
+
+		}
+	}
+	
+	static void jls(String file) {
+		try {
+			
+			File homeDir = new File(file);
+			//File p = new File("/home/masa");
+			
+			
+			String[] homeDirList=homeDir.list(); //ファイルオブジェクトのリストメソッドをつかう
+			//結果をストリングス配列に格納
+			Arrays.sort(homeDirList);
+			for (String i : homeDirList) {
+				if (i.charAt(0) == '.') ;
+				else {
+				System.out.print(i + ",");
+				System.out.println();
+				textOut.append(i);
+				textOut.append("\n");
+				} 
+			}
+			System.out.println();
+			
+		}		catch(NullPointerException e) {
+			e.printStackTrace(); // IMPORTANT
+		}
+		}//jlsおわり
 }
 //end of class ProcessBuild
 

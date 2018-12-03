@@ -26,8 +26,8 @@ public class RegexTest {
 		
 		try
 		{
-		File ydlMusicDir=new File("/home/masa/ydlAudio");
-		
+		File ydlMusicDir=new File("/home/masa/ydlAudio/Protect/Silicon Valley - Music from the HBO Series");
+		println(ydlMusicDir.exists());
 		//jls("/home/masa/ydlAudio");
 		/////////////////////////////////////////////////
 		TargetText="";
@@ -56,10 +56,12 @@ public class RegexTest {
 		
 		// Before ID3tag didn't treat file directory, just file name
 		Arrays.sort(ydlMusicDirString);
+		printList(ydlMusicDirString);
 		for (String i : ydlMusicDirString) 
 		{
-			File fileMp3=new File("/home/masa/ydlAudio/"+i);	
+			File fileMp3=new File("/home/masa/ydlAudio/Protect/Silicon Valley - Music from the HBO Series/"+i);	
 			//fileStore=new File(fileMp3.toString()+".backup");
+			println(fileMp3.exists());
 			if (fileMp3.isFile()) 
 			{
 			if (i.charAt(0) == '.') ; // start from . file ignore
