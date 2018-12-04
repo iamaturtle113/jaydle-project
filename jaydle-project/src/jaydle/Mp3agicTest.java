@@ -17,7 +17,7 @@ public class Mp3agicTest
 		println("test");
 		try
 		{
-		File file=new File("/home/masa/ydlAudio/Demonstration Synthesis - Isabella.mp3");
+		File file=new File("/home/masa/ydlAudio/'B.o.B - Nothin' On You (feat. Bruno Mars) [Official Video].mp3");
 		//File fileRename=new File("/home/masa/ydlAudio/DS Isabella.mp3");
 		//File file=new File(fileRename.toString());
 		println("exist? "+file.exists());
@@ -38,7 +38,7 @@ public class Mp3agicTest
 		//File fileNew=new File("/home/masa/ydlAudio/Demonstration Synthesis - Isabella - Phinery.mp3");
 		//file.renameTo(fileNew);
 		
-		mp3file.save("/home/masa/ydlAudio/DS Isabella.mp3");
+		//mp3file.save("/home/masa/ydlAudio/DS Isabella.mp3");
 		//println()
 		}
 		catch (Exception exc)
