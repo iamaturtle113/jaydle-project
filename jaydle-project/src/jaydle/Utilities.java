@@ -20,8 +20,8 @@ public class Utilities {
 			//File p = new File("/home/masa");
 			
 			
-			String[] homeDirList=homeDir.list(); //ファイルオブジェクトのリストメソッドをつかう
-			//結果をストリングス配列に格納
+			String[] homeDirList=homeDir.list(); //繝輔ぃ繧､繝ｫ繧ｪ繝悶ず繧ｧ繧ｯ繝医�ｮ繝ｪ繧ｹ繝医Γ繧ｽ繝�繝峨ｒ縺､縺九≧
+			//邨先棡繧偵せ繝医Μ繝ｳ繧ｰ繧ｹ驟榊�励↓譬ｼ邏�
 			Arrays.sort(homeDirList);
 			for (String i : homeDirList) {
 				if (i.charAt(0) == '.') ;
@@ -35,9 +35,9 @@ public class Utilities {
 		}		catch(NullPointerException e) {
 			e.printStackTrace(); // IMPORTANT
 		}
-		}//jlsおわり
+		}//jls縺翫ｏ繧�
 	
-	//jcatメソッドを書く
+	//jcat繝｡繧ｽ繝�繝峨ｒ譖ｸ縺�
 	static void jcat(String filename) {
 		try {
 			File textfile=new File(filename);
@@ -56,7 +56,7 @@ public class Utilities {
 		}
 	}
 
-	//リストの文字列をすべて表示する
+	//繝ｪ繧ｹ繝医�ｮ譁�蟄怜�励ｒ縺吶∋縺ｦ陦ｨ遉ｺ縺吶ｋ
 	public static void printList(String[] list) {
 		int i=0;
 		for (String element:list) {
@@ -106,9 +106,9 @@ public class Utilities {
 		
 		//println("Read from serialized file \"bar.ser\" " + myBoxAgain.getWidth());
 	}
-	//テスト用のメインメソッド
+	//繝�繧ｹ繝育畑縺ｮ繝｡繧､繝ｳ繝｡繧ｽ繝�繝�
 	public static void main(String[] args) {
 		//jcat("/home/masa/test.txt");
-		jls("/home/masa");
+		//jls("/home/masa");
 	}
 }

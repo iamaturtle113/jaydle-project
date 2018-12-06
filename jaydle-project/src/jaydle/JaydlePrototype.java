@@ -49,7 +49,9 @@ public class JaydlePrototype extends JFrame
 	 static JTextField textIn=new JTextField(initText);
 	 static JPanel panel =new JPanel();
 	 static String strIn=null;
-	 static List<String> cmdList= new ArrayList<>(Arrays.asList("youtube-dl","--no-playlist","--extract-audio","--audio-format","mp3","-o","'%(title)s.%(ext)s'"));
+	 //windows edition
+//	 static List<String> cmdList= new ArrayList<>(Arrays.asList("youtube-dl","--no-playlist","--extract-audio","--audio-format","mp3","-o","'%(title)s.%(ext)s'"));
+	 static List<String> cmdList= new ArrayList<>(Arrays.asList("resources\\youtube-dl.exe","--no-playlist","--extract-audio","--audio-format","mp3","-o","'%(title)s.%(ext)s'"));
 	 static String url;//="https://www.youtube.com/watch?v=FqVTzr3CfEg";
 	 BackgroundTask bgt; //Child class of SwingWorker
 	 static File saveDirectory; 
