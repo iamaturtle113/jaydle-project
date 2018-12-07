@@ -5,6 +5,7 @@ package jaydle;
  */
 import java.lang.ProcessBuilder;
 
+import static jaydle.JaydlePrototype.data;
 //import static com.wordpress.lavilleeternell.IOMethods.println;
 import static jaydle.Utilities.*;
 import java.awt.BorderLayout;
@@ -36,6 +37,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
@@ -49,8 +51,9 @@ import com.mpatric.mp3agic.Mp3File;
  */
 public class JaydlePrototype extends JFrame 
 {
+	 static JFrame frame;
 	 static JTextArea textOut=new JTextArea();
-	 JScrollPane scrollpane=new JScrollPane(
+	 static JScrollPane scrollpane=new JScrollPane(
 			 textOut,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	 static String initText=("Please input URL");
@@ -85,7 +88,15 @@ public class JaydlePrototype extends JFrame
 		static String[] TargetTextSplitArray;
 		static File file;
 		static File fileStore;
-		static int n;
+		static int n=0;
+		//For JTable
+		static Object[][] data;
+		static Object dataRow[];
+		static String[] columnNames= {
+				"FileName",
+				"Artist",
+				"Title",
+		};
 //
 	 
 	// serObj=load("jaydle.ser");
@@ -279,7 +290,7 @@ public class JaydlePrototype extends JFrame
 	{
 		
 		JLabel text =new JLabel("\"JAva Youtube-DL Exteded implementation by Masataka Nakamura\"");
-		JFrame frame = new JFrame("Jaydle");
+		frame = new JFrame("Jaydle");
 		JMenuBar menuBar=new JMenuBar();
 		JMenu menu1=new JMenu("Store");
 		menuBar.add(menu1);
@@ -441,12 +452,14 @@ public class JaydlePrototype extends JFrame
 	{
 		public void actionPerformed(ActionEvent e)
 		{
+			
+			
 			try 
 			{
+				
 				File ydlMusicDir=JaydlePrototype.saveDirectory;
 				println("ydlMusicDir.exists() ? "+ydlMusicDir.exists());
 				println("");
-				//jls("/home/masa/ydlAudio");
 				/////////////////////////////////////////////////
 				TargetText="";
 				patternStr="\\-\\ ";
@@ -469,9 +482,12 @@ public class JaydlePrototype extends JFrame
 				// Before ID3tag didn't treat file directory, just file name
 				Arrays.sort(ydlMusicDirString);
 				println(ydlMusicDirString.length);
+				data=new Object[ydlMusicDirString.length][3];
 				//printList(ydlMusicDirString);
 				for (int i=0; i<ydlMusicDirString.length;i++) 
 				{
+					//Editting source code changed var name i to ydlMusicDirString[i]
+					//and it's content file name to absolute path
 					TargetText=ydlMusicDirString[i];
 					// i is file name
 					matcher=pattern.matcher(TargetText);
@@ -482,9 +498,13 @@ public class JaydlePrototype extends JFrame
 						
 						File fileMp3=new File(ydlMusicDir.toString()+"/"+ydlMusicDirString[i]);	
 						println("This is "+n+"th mp3 file:");
-						println(fileMp3.toString());
+						println(fileMp3.getName());
 						textOut.append("This is "+n+"th mp3 file:\n");
-						textOut.append(fileMp3.toString()+"\n");
+						textOut.append(fileMp3.getName()+"\n");
+						
+
+						
+
 						//Moved to in if(matcherTail.find())
 						////////////////////////////////////////////////
 					//	if (fileMp3.isFile()) 
@@ -525,6 +545,15 @@ public class JaydlePrototype extends JFrame
 								textOut.append("Title:"+v2Tag.getTitle()+"\n");
 								textOut.append("\n\n");
 								
+								/*
+								 * Make Object[][] for JTable
+								 */
+								dataRow=new Object[]{fileMp3.getName(),
+										v2Tag.getArtist(),
+										v2Tag.getTitle(),
+										};
+								data[i]=dataRow;
+								
 								//List<String> list=Arrays.asList(TargetTextSplitArray);
 								
 								//mp3file.save(ydlMusicDir.toString()+"/new "+i);
@@ -545,7 +574,7 @@ public class JaydlePrototype extends JFrame
 							println("");
 							
 							//}//end of if
-						} 
+						}//End of if (matcherTail.find())
 					n++;
 					}//End of for
 			
@@ -553,8 +582,8 @@ public class JaydlePrototype extends JFrame
 					//println(fileMp3.exists());
 					//File fileMp3=new File(ydlMusicDir.toString()+"/"+ydlMusicDirString[i]);	
 					
-
-					
+				
+					printDoubleDimentionArray();
 				
 				println("");
 				
@@ -564,6 +593,11 @@ public class JaydlePrototype extends JFrame
 				println("Exception caught"+exc);
 				
 			}
+			JTable jTable=new JTable(data,columnNames);
+			JScrollPane scrollpane4JTable=new JScrollPane(jTable);
+			frame.getContentPane().add(BorderLayout.NORTH,scrollpane4JTable);
+			frame.setVisible(true);
+			
 		}
 	}
 	
@@ -592,6 +626,17 @@ public class JaydlePrototype extends JFrame
 			e.printStackTrace(); // IMPORTANT
 		}
 		}//jlsおわり
+	
+	public void printDoubleDimentionArray()
+	{
+		for(int i=0;i<data.length;i++)
+		{
+			for(int j=0;j<data[i].length;j++)
+			{
+				println(data[i][j]);
+			}
+		}
+	}
 }
 //end of class ProcessBuild
 
