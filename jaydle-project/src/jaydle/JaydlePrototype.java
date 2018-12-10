@@ -5,7 +5,10 @@ package jaydle;
  */
 import java.lang.ProcessBuilder;
 
-import static jaydle.JaydlePrototype.data;
+import static jaydle.JaydlePrototype.*;
+import static jaydle.BackgroundTask.*;
+import static jaydle.ActionListenerClass.*;
+
 //import static com.wordpress.lavilleeternell.IOMethods.println;
 import static jaydle.Utilities.*;
 import java.awt.BorderLayout;
@@ -71,7 +74,7 @@ public class JaydlePrototype extends JFrame
 			 "'%(title)s.%(ext)s'"
 			 ));
 	 static String url;//="https://www.youtube.com/watch?v=FqVTzr3CfEg";
-	 BackgroundTask bgt; //Child class of SwingWorker
+	 static BackgroundTask bgt; //Child class of SwingWorker
 	 static File saveDirectory; 
 	 static ProcessBuilder pbNew;
 	 static String saveDirString=System.getProperty("user.home");//use home dir
@@ -118,215 +121,16 @@ public class JaydlePrototype extends JFrame
 		  }
 	 }
 	
-	public class BackgroundTask extends SwingWorker<Integer, String>
-	{
-		@Override
-		public Integer doInBackground() throws Exception 
-		{//Use publish() method at here
-			try 
-			{
-				ProcessBuilder pb=new ProcessBuilder(cmdList);
+	
+	
 
-				pb.directory(saveDirectory);//これはFile型を返却する
-				
-				Process p=pb.start();
-				BufferedReader bfr2=new BufferedReader(new InputStreamReader(p.getInputStream()));
-				BufferedReader bfrErr=new BufferedReader(new InputStreamReader(p.getErrorStream()));
-				
-				//textOut.append(saveDirectory.toString());
+	
+	
+	
+	
 
-				String line=null;
-					while((line=bfr2.readLine())!=null)
-				//最後まで読み込むと、lineがnullになることを利用している
-					{
-						println(line);
-						//textOut.append(line+"\n");
-						publish(line);
-					}
-					while((line=bfrErr.readLine())!=null)
-					//最後まで読み込むと、lineがnullになることを利用している
-					{
-						println(line);
-						//textOut.append(line+"\n");
-						publish(line);
-					}
-			}
-			//try statement end.
 
-			/*catch(Exception e)
-			{
-				e.printStackTrace();
-			}*/
-			catch(NullPointerException e)
-			{
-				println("NullPo!!!");
-				e.printStackTrace();
-				
-			}
-			finally
-			{
-			//cmdList.clear();
-				cmdList.remove(5);
-			}
-			
-			return null;
-		}
-	
-		@Override
-		protected void process(List<String> lines)
-		{
-			try
-			{
-				for(String line:lines)
-				{
-					textOut.append(line+"\n");
-				}
-			}
-			catch(NullPointerException e)
-			{
-				println("NullPo!!!");
-				e.printStackTrace();
-				
-			}
-		}
-		
-		@Override
-		protected void done()
-		{
-			try
-			{
-				int result=get();
-				textOut.append("result is "+result);
-				cmdList.clear();
-			}
-			catch(Exception ex)
-			{}
-			
-		}
-	}
-	//End of BackgroundTask
-	
-	public static List<String> toList(String[] strArray)
-	{
-		try
-		{
-		//List<String> cmdList=new ArrayList<String>();
-		for(String s:strArray)
-			{
-				cmdList.add(s);
-			}
-		return cmdList;
-		}catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	
-	public static void cmdListSetter(String url)
-	{
-		//String[] audioDl= {"youtube-dl","--no-playlist","--extract-audio","--audio-format","mp3",url,"-o","'%(title)s.%(ext)s'"};
-		println("From cmdListGenerator: content of variable url = "+url);
-		//cmdList.set(5,url);
-		//printList(audioDl);
-		cmdList.add(5,url);
-	}
-	
-	
-	
-	
-	
-	public static void main(String[] args) 
-	{
-		//JaydleProto01SwingWorker guiApp=new JaydleProto01SwingWorker();
-		//BackgroundTask<Integer,String> bgt=new BackgroundTask<Integer,String>();
-		//guiApp.initGuiApp();
-		//bgt.execute();
-		
-		
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new JaydlePrototype().initGuiApp();
-			}
-		});
-		try
-		{
-			File serFile=new File("jaydle.ser");
-// If file exists, load past data and substitute to saveDirectory.
-// else make file.
-			
-			if(serFile.exists())
-			{
-				serObj=(saveDirClass) load(serFile);
-				saveDirectory=serObj.getPath();
-				println("Return of serObj.getPath().toString() "+serObj.getPath().toString());
-			}
-			else
-			{
-				serFile.createNewFile();
-			}
-		}
-		catch (IOException exc)
-		{
-			println("IOE");
-		}
-		catch (ClassNotFoundException exc2)
-		{
-			println("CNFE");
-		}
-		println("Return of serObj.getPath().toString() "+serObj.getPath().toString());
-		//saveDirectory=new File(saveDirString);
-		//serObj.setPath(saveDirectory);
-		//serObj.setPath(serObj.getPath()); //saveDirSeriarizable
-		
-        Properties properties = System.getProperties();
-        properties.list(System.out);
-		
-	}//end of main method
-	
-	public void initGuiApp() 
-	{
-		
-		JLabel text =new JLabel("\"JAva Youtube-DL Exteded implementation by Masataka Nakamura\"");
-		frame = new JFrame("Jaydle");
-		JMenuBar menuBar=new JMenuBar();
-		JMenu menu1=new JMenu("Store");
-		menuBar.add(menu1);
-		JMenuItem menuItem1=new JMenuItem("Change save directory");
-		JMenuItem menuItem2Display=new JMenuItem("Display current saving directory");
-		JMenuItem menuItem3ClearDisplay=new JMenuItem("Clear Display");
-		JMenuItem menuItem4ListDirectory=new JMenuItem("List Directory");
-		JMenuItem menuItem5ListMp3Files=new JMenuItem("List MP3 Files");
-		menu1.add(menuItem1);
-		menu1.add(menuItem2Display);
-		menu1.add(menuItem3ClearDisplay);
-		menu1.add(menuItem4ListDirectory);
-		menu1.add(menuItem5ListMp3Files);
-		menuItem1.addActionListener(new MenuListenerSaveDir());
-		menuItem2Display.addActionListener(new MenuListenerDisplayCurrentDir());
-		menuItem3ClearDisplay.addActionListener(new MenuListenerClearDisplay());
-		menuItem4ListDirectory.addActionListener(new MenuListenerListDirectory());
-		menuItem5ListMp3Files.addActionListener(new MenuListenerListMp3Files());
-		frame.setJMenuBar(menuBar);
-		
-		textOut.setLineWrap(true);
-		JButton button=new JButton("Download");
-		button.setPreferredSize(new Dimension(100, 30));
-		button.addActionListener(new ButtonListener());	
-		panel.setLayout(new BorderLayout());//このコードがパネルのレイアウト変更には必要
-		panel.add(BorderLayout.NORTH,text);//"Youtube-DL Exteded Java Implementation by Masataka Nakamura"
-		panel.add(BorderLayout.SOUTH,textIn);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(BorderLayout.CENTER,scrollpane);
-		frame.getContentPane().add(BorderLayout.NORTH,panel);
-		frame.getContentPane().add(BorderLayout.SOUTH,button);
-		frame.setSize(800,600);
-		frame.setVisible(true);
-	}
-	//End of init()
-	
+
 	class ButtonListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
@@ -345,7 +149,7 @@ public class JaydlePrototype extends JFrame
 					
 		}
 	}
-	
+
 	class MenuListenerSaveDir implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
@@ -601,8 +405,51 @@ public class JaydlePrototype extends JFrame
 		}
 	}
 	
-	static void jls(String file) {
-		try {
+	public void initGuiApp() 
+	{
+		
+		JLabel text =new JLabel("\"JAva Youtube-DL Exteded implementation by Masataka Nakamura\"");
+		frame = new JFrame("Jaydle");
+		JMenuBar menuBar=new JMenuBar();
+		JMenu menu1=new JMenu("Store");
+		menuBar.add(menu1);
+		JMenuItem menuItem1=new JMenuItem("Change save directory");
+		JMenuItem menuItem2Display=new JMenuItem("Display current saving directory");
+		JMenuItem menuItem3ClearDisplay=new JMenuItem("Clear Display");
+		JMenuItem menuItem4ListDirectory=new JMenuItem("List Directory");
+		JMenuItem menuItem5ListMp3Files=new JMenuItem("List MP3 Files");
+		menu1.add(menuItem1);
+		menu1.add(menuItem2Display);
+		menu1.add(menuItem3ClearDisplay);
+		menu1.add(menuItem4ListDirectory);
+		menu1.add(menuItem5ListMp3Files);
+		menuItem1.addActionListener(new MenuListenerSaveDir());
+		menuItem2Display.addActionListener(new MenuListenerDisplayCurrentDir());
+		menuItem3ClearDisplay.addActionListener(new MenuListenerClearDisplay());
+		menuItem4ListDirectory.addActionListener(new MenuListenerListDirectory());
+		menuItem5ListMp3Files.addActionListener(new MenuListenerListMp3Files());
+		frame.setJMenuBar(menuBar);
+		
+		textOut.setLineWrap(true);
+		JButton button=new JButton("Download");
+		button.setPreferredSize(new Dimension(100, 30));
+		button.addActionListener(new ButtonListener());	
+		panel.setLayout(new BorderLayout());//このコードがパネルのレイアウト変更には必要
+		panel.add(BorderLayout.NORTH,text);//"Youtube-DL Exteded Java Implementation by Masataka Nakamura"
+		panel.add(BorderLayout.SOUTH,textIn);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().add(BorderLayout.CENTER,scrollpane);
+		frame.getContentPane().add(BorderLayout.NORTH,panel);
+		frame.getContentPane().add(BorderLayout.SOUTH,button);
+		frame.setSize(800,600);
+		frame.setVisible(true);
+	}
+	//End of init()
+	
+	static void jls(String file) 
+	{
+		try 
+		{
 			
 			File homeDir = new File(file);
 			//File p = new File("/home/masa");
@@ -611,9 +458,11 @@ public class JaydlePrototype extends JFrame
 			String[] homeDirList=homeDir.list(); //ファイルオブジェクトのリストメソッドをつかう
 			//結果をストリングス配列に格納
 			Arrays.sort(homeDirList);
-			for (String i : homeDirList) {
+			for (String i : homeDirList) 
+			{
 				if (i.charAt(0) == '.') ;
-				else {
+				else 
+				{
 				System.out.print(i + ",");
 				System.out.println();
 				textOut.append(i);
@@ -622,10 +471,12 @@ public class JaydlePrototype extends JFrame
 			}
 			System.out.println();
 			
-		}		catch(NullPointerException e) {
+		}		
+		catch(NullPointerException e) 
+		{
 			e.printStackTrace(); // IMPORTANT
 		}
-		}//jlsおわり
+	}//jlsおわり
 	
 	public void printDoubleDimentionArray()
 	{
@@ -637,6 +488,37 @@ public class JaydlePrototype extends JFrame
 			}
 		}
 	}
+	
+	public static List<String> toList(String[] strArray)
+	{
+		try
+		{
+		//List<String> cmdList=new ArrayList<String>();
+		for(String s:strArray)
+			{
+				cmdList.add(s);
+			}
+		return cmdList;
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	
+	public static void cmdListSetter(String url)
+	{
+		//String[] audioDl= {"youtube-dl","--no-playlist","--extract-audio","--audio-format","mp3",url,"-o","'%(title)s.%(ext)s'"};
+		println("From cmdListGenerator: content of variable url = "+url);
+		//cmdList.set(5,url);
+		//printList(audioDl);
+		cmdList.add(5,url);
+	}
 }
 //end of class ProcessBuild
+
+
+
 

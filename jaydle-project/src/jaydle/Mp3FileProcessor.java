@@ -11,20 +11,11 @@ import com.mpatric.mp3agic.Mp3File;
 
 import java.io.*;
 import static jaydle.Utilities.*;
-import static jaydle.BackgroundTask.*;
-import jaydle.JaydlePrototype.*;
-/*
- * このクラスが何をしているか。
- * メイン分が有る。
- * jaydle.serの情報をロード
- * 
- * Regexを使った、ID3タガ-
- * 
- * 
- * 
- */
+import jaydle.JaydlePrototype;
+import jaydle.JaydlePrototype.saveDirClass;
 
-public class RegexTest {
+public class Mp3FileProcessor {
+
 	static String TargetText;
 	static String TargetTextNohead;
 	static String TargetTextNoheadNoTail;
@@ -75,6 +66,7 @@ public class RegexTest {
 		{
 		File ydlMusicDir=JaydlePrototype.saveDirectory;
 		println("ydlMusicDir.exists() ? "+ydlMusicDir.exists());
+		println("");
 		//jls("/home/masa/ydlAudio");
 		/////////////////////////////////////////////////
 		TargetText="";
@@ -103,25 +95,39 @@ public class RegexTest {
 		
 		// Before ID3tag didn't treat file directory, just file name
 		Arrays.sort(ydlMusicDirString);
+		println(ydlMusicDirString.length);
 		//printList(ydlMusicDirString);
-		for (String i : ydlMusicDirString) 
+		for (int i=0; i<ydlMusicDirString.length;i++) 
 		{
-			File fileMp3=new File(ydlMusicDir.toString()+"/"+i);	
+			TargetText=ydlMusicDirString[i];
+			// i is file name
+			matcher=pattern.matcher(TargetText);
+			matcherHead=patternHead.matcher(TargetText);
+			matcherTail=patternTail.matcher(TargetText);
+			if (matcherTail.find())
+			{
+				
+				File fileMp3=new File(ydlMusicDir.toString()+"/"+ydlMusicDirString[i]);	
+				println("This is "+n+"th mp3 file:");
+				println(fileMp3.toString());
+			}
+	
 			//fileStore=new File(fileMp3.toString()+".backup");
 			//println(fileMp3.exists());
+			File fileMp3=new File(ydlMusicDir.toString()+"/"+ydlMusicDirString[i]);	
+			
 			if (fileMp3.isFile()) 
 			{
-			if (i.charAt(0) == '.') ; // start from . file ignore
+			if (ydlMusicDirString[i].charAt(0) == '.') ; // start from . file ignore
 			else 
 			{
 		
-				TargetText=i;// i is file name
+
 				//file=new File(i);
 				
 				Mp3File mp3file=new Mp3File(fileMp3); 
 				ID3v2 v2Tag=mp3file.getId3v2Tag();
-				matcher=pattern.matcher(TargetText);
-				matcherHead=patternHead.matcher(TargetText);
+
 				//matcherTail=patternTail.matcher(TargetText);
 				//println("List of ydlMusicDir :"+n+"\n "+i);
 				
@@ -141,13 +147,14 @@ public class RegexTest {
 					v2Tag.setTitle(TargetTextSplitArray[1]);
 					
 					//fileMp3.renameTo(fileStore);
-					println(fileMp3.toString());
-					println("v2Tag.getArtist() "+v2Tag.getArtist());	// Saving not yet
-					println("v2Tag.getTitle() "+v2Tag.getTitle());
+					//println(fileMp3.toString());
+					//println("v2Tag.getArtist() "+v2Tag.getArtist());	// Saving not yet
+					//println("v2Tag.getTitle() "+v2Tag.getTitle());
 					//List<String> list=Arrays.asList(TargetTextSplitArray);
+					
+					//mp3file.save(ydlMusicDir.toString()+"/new "+i);
+					//File fileMp3New=new File(ydlMusicDir.toString()+"/new "+i);
 					/*
-					mp3file.save(ydlMusicDir.toString()+"/new "+i);
-					File fileMp3New=new File(ydlMusicDir.toString()+"/new "+i);
 					if(fileMp3New.exists())
 					{
 						println("fileMp3New = "+fileMp3New.toString()+" exists.");
@@ -156,11 +163,13 @@ public class RegexTest {
 					}
 					*/
 					
+					
 				//println(i);
 				//println("matches? "+matcher.matches());
 				//println("find? "+matcher.find());
 				println("");
-				}
+				
+				}//end of for
 			} 
 			n++;
 		}
@@ -172,26 +181,7 @@ public class RegexTest {
 		println("Exception caught"+exc);
 		
 	}
-		
-	/*	
-		String str="Masa's test for Regex";
-		String patternStr=".*regex.*";
-		Pattern pattern=Pattern.compile(patternStr,Pattern.CASE_INSENSITIVE);
-		Matcher matcher=pattern.matcher(str);
-		println("Text is \n"+str+"\npattern is \n"+patternStr);
 
-		Pattern pat=matcher.pattern();
-		println("pat.pattern() returns "+pat.pattern());
-		println(pattern.flags());
-		println(matcher.matches());
+		}
 		
-		if(matcher.matches()) {
-			println("Matched. " + str);
-		}
-		else {
-			println("Not matched. ");
-		}
-	*/
 	}
-
-}

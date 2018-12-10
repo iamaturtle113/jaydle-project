@@ -1,7 +1,12 @@
 package jaydle;
+import static jaydle.Utilities.println;
+
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utilities {
 	
@@ -80,6 +85,16 @@ public class Utilities {
 		}
 	}
 	
+	
+	public static void printListFile(List<File> list) {
+		int i=0;
+		for (Object element:list) {
+			println("["+i+"]: "+element.toString());
+			i++;
+		}
+	}
+	
+	
 	//Serialization methods.
 	//-------------------------
 	
@@ -106,9 +121,60 @@ public class Utilities {
 		
 		//println("Read from serialized file \"bar.ser\" " + myBoxAgain.getWidth());
 	}
+	
+	
+	//Returns List of filtered File objects
+	public static List<File> regexFilterFileArray(File searchDirectory, String patternStr)
+	{
+		//Init List
+		List<File> filteredFileList=new ArrayList<File>();
+		try 
+		{
+			
+			//make pattern object
+			Pattern pattern=Pattern.compile(patternStr);
+			//make File[] of searchDirectory's files
+			File[] contentFileOfDirectory=searchDirectory.listFiles();
+			Arrays.sort(contentFileOfDirectory);
+			
+			//make matcher object
+			for(int i=0;i<contentFileOfDirectory.length;i++)
+			{
+				Matcher matcher=pattern.matcher(contentFileOfDirectory[i].getName());
+				if(matcher.find())
+				{
+					filteredFileList.add(contentFileOfDirectory[i]);
+				}
+			}
+			
+			// last statement of try
+			
+		}
+		catch(Exception exc)
+		{
+			println("Exception occured at listTaggedFiles");
+			exc.printStackTrace();
+		}
+		return filteredFileList;
+	}// End of regexFilterFileArray
+	/////////////////////////////////////////////////////////////////////////
+	
+	/*
+	public void printDoubleDimentionArray()
+	{
+		for(int i=0;i<data.length;i++)
+		{
+			for(int j=0;j<data[i].length;j++)
+			{
+				println(data[i][j]);
+			}
+		}
+	}
+*/
 	//テスト用のメインメソッド
 	public static void main(String[] args) {
 		//jcat("/home/masa/test.txt");
 		jls("/home/masa");
 	}
+	
 }
