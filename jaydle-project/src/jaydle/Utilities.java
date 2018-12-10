@@ -152,7 +152,7 @@ public class Utilities {
 		}
 		catch(Exception exc)
 		{
-			println("Exception occured at listTaggedFiles");
+			println("Exception occured at regexFilterFileArray.");
 			exc.printStackTrace();
 		}
 		return filteredFileList;
