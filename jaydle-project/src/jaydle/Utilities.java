@@ -94,6 +94,14 @@ public class Utilities {
 		}
 	}
 	
+	public static void printListFileName(List<File> list) {
+		int i=0;
+		for (File element:list) {
+			println("["+i+"]: "+element.getName());
+			i++;
+		}
+	}
+	
 	
 	//Serialization methods.
 	//-------------------------

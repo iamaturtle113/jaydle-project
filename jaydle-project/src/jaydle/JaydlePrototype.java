@@ -105,6 +105,47 @@ public class JaydlePrototype extends JFrame
 	// serObj=load("jaydle.ser");
 
 	 //static File dir=new File ("");
+		
+		public void initGuiApp() 
+		{
+			
+			JLabel text =new JLabel("\"JAva Youtube-DL Exteded implementation by Masataka Nakamura\"");
+			frame = new JFrame("Jaydle");
+			JMenuBar menuBar=new JMenuBar();
+			JMenu menu1=new JMenu("Store");
+			menuBar.add(menu1);
+			JMenuItem menuItem1=new JMenuItem("Change save directory");
+			JMenuItem menuItem2Display=new JMenuItem("Display current saving directory");
+			JMenuItem menuItem3ClearDisplay=new JMenuItem("Clear Display");
+			JMenuItem menuItem4ListDirectory=new JMenuItem("List Directory");
+			JMenuItem menuItem5ListMp3Files=new JMenuItem("List MP3 Files");
+			menu1.add(menuItem1);
+			menu1.add(menuItem2Display);
+			menu1.add(menuItem3ClearDisplay);
+			menu1.add(menuItem4ListDirectory);
+			menu1.add(menuItem5ListMp3Files);
+			menuItem1.addActionListener(new MenuListenerSaveDir());
+			menuItem2Display.addActionListener(new MenuListenerDisplayCurrentDir());
+			menuItem3ClearDisplay.addActionListener(new MenuListenerClearDisplay());
+			menuItem4ListDirectory.addActionListener(new MenuListenerListDirectory());
+			menuItem5ListMp3Files.addActionListener(new MenuListenerListMp3Files());
+			frame.setJMenuBar(menuBar);
+			
+			textOut.setLineWrap(true);
+			JButton button=new JButton("Download");
+			button.setPreferredSize(new Dimension(100, 30));
+			button.addActionListener(new ButtonListener());	
+			panel.setLayout(new BorderLayout());//このコードがパネルのレイアウト変更には必要
+			panel.add(BorderLayout.NORTH,text);//"Youtube-DL Exteded Java Implementation by Masataka Nakamura"
+			panel.add(BorderLayout.SOUTH,textIn);
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.getContentPane().add(BorderLayout.CENTER,scrollpane);
+			frame.getContentPane().add(BorderLayout.NORTH,panel);
+			frame.getContentPane().add(BorderLayout.SOUTH,button);
+			frame.setSize(800,600);
+			frame.setVisible(true);
+		}
+		//End of init()
 	 
 	 public static class saveDirClass implements Serializable // Named as serObj instance  
 	 {
@@ -256,195 +297,111 @@ public class JaydlePrototype extends JFrame
 	{
 		public void actionPerformed(ActionEvent e)
 		{
+			Id3Tagger gui=new Id3Tagger();
+			gui.initGuiId3Tagger();
 			
-			
-			try 
-			{
-				
-				File ydlMusicDir=JaydlePrototype.saveDirectory;
-				println("ydlMusicDir.exists() ? "+ydlMusicDir.exists());
-				println("");
-				/////////////////////////////////////////////////
-				TargetText="";
-				patternStr="\\-\\ ";
-				patternStrHead="'";
-				patternStrTail="\\.mp3";
-				//Compile patterns
-				Pattern pattern=Pattern.compile(patternStr);
-				Pattern patternHead=Pattern.compile(patternStrHead);
-				Pattern patternTail=Pattern.compile(patternStrTail);
-				//Initialize matchers
-				
-				Matcher matcher=pattern.matcher(TargetText);
-				Matcher matcherHead=patternHead.matcher(TargetText);
-				Matcher matcherTail=patternTail.matcher(TargetText);
-	
-				///////////////////////////////////////////////
-				String[] ydlMusicDirString=ydlMusicDir.list(); //ファイルオブジェクトのリストメソッドをつかう
-				//結果をストリングス配列に格納
-				
-				// Before ID3tag didn't treat file directory, just file name
-				Arrays.sort(ydlMusicDirString);
-				println(ydlMusicDirString.length);
-				data=new Object[ydlMusicDirString.length][3];
-				//printList(ydlMusicDirString);
-				for (int i=0; i<ydlMusicDirString.length;i++) 
-				{
-					//Editting source code changed var name i to ydlMusicDirString[i]
-					//and it's content file name to absolute path
-					TargetText=ydlMusicDirString[i];
-					// i is file name
-					matcher=pattern.matcher(TargetText);
-					matcherHead=patternHead.matcher(TargetText);
-					matcherTail=patternTail.matcher(TargetText);
-					if (matcherTail.find())
-					{
-						
-						File fileMp3=new File(ydlMusicDir.toString()+"/"+ydlMusicDirString[i]);	
-						println("This is "+n+"th mp3 file:");
-						println(fileMp3.getName());
-						textOut.append("This is "+n+"th mp3 file:\n");
-						textOut.append(fileMp3.getName()+"\n");
-						
-
-						
-
-						//Moved to in if(matcherTail.find())
-						////////////////////////////////////////////////
-					//	if (fileMp3.isFile()) 
-					//	{
-						//if (ydlMusicDirString[i].charAt(0) == '.') ; // start from . file ignore
-						//else 
-						//{
-					
-
-							//file=new File(i);
-							
-							Mp3File mp3file=new Mp3File(fileMp3); 
-							ID3v2 v2Tag=mp3file.getId3v2Tag();
-
-							//matcherTail=patternTail.matcher(TargetText);
-							//println("List of ydlMusicDir :"+n+"\n "+i);
-							
-							//println("");
-							//matcher.find() means found "\\-\\ "
-							//if(matcher.find())
-							//{
-								//remove ' if filename has it at head
-								TargetTextNohead=matcherHead.replaceFirst("");// Need to store TargetText temporary
-								matcherTail=patternTail.matcher(TargetTextNohead);
-							//	TargetText=matcherTail.replaceFirst("");
-								//remove .mp3
-								TargetTextNoheadNoTail=matcherTail.replaceFirst("");
-								TargetTextSplitArray=pattern.split(TargetTextNoheadNoTail);
-								//printList(TargetTextSplitArray);
-							//	v2Tag.setArtist(TargetTextSplitArray[0]);
-							//	v2Tag.setTitle(TargetTextSplitArray[1]);
-								
-								//fileMp3.renameTo(fileStore);
-								//println(fileMp3.toString());
-								println("v2Tag.getArtist() "+v2Tag.getArtist());	// Saving not yet
-								println("v2Tag.getTitle() "+v2Tag.getTitle());
-								textOut.append("Artist:"+v2Tag.getArtist()+"\n");	// Saving not yet
-								textOut.append("Title:"+v2Tag.getTitle()+"\n");
-								textOut.append("\n\n");
-								
-								/*
-								 * Make Object[][] for JTable
-								 */
-								dataRow=new Object[]{fileMp3.getName(),
-										v2Tag.getArtist(),
-										v2Tag.getTitle(),
-										};
-								data[i]=dataRow;
-								
-								//List<String> list=Arrays.asList(TargetTextSplitArray);
-								
-								//mp3file.save(ydlMusicDir.toString()+"/new "+i);
-								//File fileMp3New=new File(ydlMusicDir.toString()+"/new "+i);
-								/*
-								if(fileMp3New.exists())
-								{
-									println("fileMp3New = "+fileMp3New.toString()+" exists.");
-									fileMp3.delete();
-									fileMp3New.renameTo(fileMp3);
-								}
-								*/
-								
-								
-							//println(i);
-							//println("matches? "+matcher.matches());
-							//println("find? "+matcher.find());
-							println("");
-							
-							//}//end of if
-						}//End of if (matcherTail.find())
-					n++;
-					}//End of for
-			
-					//fileStore=new File(fileMp3.toString()+".backup");
-					//println(fileMp3.exists());
-					//File fileMp3=new File(ydlMusicDir.toString()+"/"+ydlMusicDirString[i]);	
-					
-				
-					printDoubleDimentionArray();
-				
-				println("");
-				
-			}	// End of Try	
-			catch(Exception exc)
-			{
-				println("Exception caught"+exc);
-				
-			}
-			JTable jTable=new JTable(data,columnNames);
-			JScrollPane scrollpane4JTable=new JScrollPane(jTable);
-			frame.getContentPane().add(BorderLayout.NORTH,scrollpane4JTable);
-			frame.setVisible(true);
-			
+//			try 
+//			{
+//				File ydlMusicDir=JaydlePrototype.saveDirectory;
+//				println("ydlMusicDir.exists() ? "+ydlMusicDir.exists());
+//				println("");
+//				/////////////////////////////////////////////////
+//				TargetText="";
+//				patternStr="\\-\\ ";
+//				patternStrHead="'";
+//				patternStrTail="\\.mp3";
+//				//Compile patterns
+//				Pattern pattern=Pattern.compile(patternStr);
+//				Pattern patternHead=Pattern.compile(patternStrHead);
+//				Pattern patternTail=Pattern.compile(patternStrTail);
+//				//Initialize matchers
+//				Matcher matcher=pattern.matcher(TargetText);
+//				Matcher matcherHead=patternHead.matcher(TargetText);
+//				Matcher matcherTail=patternTail.matcher(TargetText);
+//	
+//				///////////////////////////////////////////////
+//				String[] ydlMusicDirString=ydlMusicDir.list(); //ファイルオブジェクトのリストメソッドをつかう
+//				//結果をストリングス配列に格納
+//				
+//				// Before ID3tag didn't treat file directory, just file name
+//				Arrays.sort(ydlMusicDirString);
+//				println(ydlMusicDirString.length);
+//				data=new Object[ydlMusicDirString.length][3];
+//				//printList(ydlMusicDirString);
+//				for (int i=0; i<ydlMusicDirString.length;i++) 
+//				{
+//					//Editting source code changed var name i to ydlMusicDirString[i]
+//					//and it's content file name to absolute path
+//					TargetText=ydlMusicDirString[i];
+//					// i is file name
+//					matcher=pattern.matcher(TargetText);
+//					matcherHead=patternHead.matcher(TargetText);
+//					matcherTail=patternTail.matcher(TargetText);
+//					if (matcherTail.find())
+//					{
+//						
+//						File fileMp3=new File(ydlMusicDir.toString()+"/"+ydlMusicDirString[i]);	
+//						println("This is "+n+"th mp3 file:");
+//						println(fileMp3.getName());
+//						textOut.append("This is "+n+"th mp3 file:\n");
+//						textOut.append(fileMp3.getName()+"\n");
+//
+//
+//							
+//							Mp3File mp3file=new Mp3File(fileMp3); 
+//							ID3v2 v2Tag=mp3file.getId3v2Tag();
+//
+//								//remove ' if filename has it at head
+//								TargetTextNohead=matcherHead.replaceFirst("");// Need to store TargetText temporary
+//								matcherTail=patternTail.matcher(TargetTextNohead);
+//							//	TargetText=matcherTail.replaceFirst("");
+//								//remove .mp3
+//								TargetTextNoheadNoTail=matcherTail.replaceFirst("");
+//								TargetTextSplitArray=pattern.split(TargetTextNoheadNoTail);
+//								//printList(TargetTextSplitArray);
+//							//	v2Tag.setArtist(TargetTextSplitArray[0]);
+//							//	v2Tag.setTitle(TargetTextSplitArray[1]);
+//								
+//								//fileMp3.renameTo(fileStore);
+//								//println(fileMp3.toString());
+//								println("v2Tag.getArtist() "+v2Tag.getArtist());	// Saving not yet
+//								println("v2Tag.getTitle() "+v2Tag.getTitle());
+//								textOut.append("Artist:"+v2Tag.getArtist()+"\n");	// Saving not yet
+//								textOut.append("Title:"+v2Tag.getTitle()+"\n");
+//								textOut.append("\n\n");
+//								
+//								/*
+//								 * Make Object[][] for JTable
+//								 */
+//								dataRow=new Object[]{fileMp3.getName(),
+//										v2Tag.getArtist(),
+//										v2Tag.getTitle(),
+//										};
+//								data[i]=dataRow;
+//
+//							println("");
+//							
+//							//}//end of if
+//						}//End of if (matcherTail.find())
+//					n++;
+//					}//End of for
+//					printDoubleDimentionArray();
+//				println("");
+//			}	// End of Try	
+//			catch(Exception exc)
+//			{
+//				println("Exception caught"+exc);
+//			}
+//			JTable jTable=new JTable(data,columnNames);
+//			JScrollPane scrollpane4JTable=new JScrollPane(jTable);
+//			JFrame frameTagger=new JFrame();
+//			frameTagger.getContentPane().add(BorderLayout.NORTH,scrollpane4JTable);
+//			frameTagger.setSize(800,600);
+//			frameTagger.setVisible(true);
 		}
 	}
 	
-	public void initGuiApp() 
-	{
-		
-		JLabel text =new JLabel("\"JAva Youtube-DL Exteded implementation by Masataka Nakamura\"");
-		frame = new JFrame("Jaydle");
-		JMenuBar menuBar=new JMenuBar();
-		JMenu menu1=new JMenu("Store");
-		menuBar.add(menu1);
-		JMenuItem menuItem1=new JMenuItem("Change save directory");
-		JMenuItem menuItem2Display=new JMenuItem("Display current saving directory");
-		JMenuItem menuItem3ClearDisplay=new JMenuItem("Clear Display");
-		JMenuItem menuItem4ListDirectory=new JMenuItem("List Directory");
-		JMenuItem menuItem5ListMp3Files=new JMenuItem("List MP3 Files");
-		menu1.add(menuItem1);
-		menu1.add(menuItem2Display);
-		menu1.add(menuItem3ClearDisplay);
-		menu1.add(menuItem4ListDirectory);
-		menu1.add(menuItem5ListMp3Files);
-		menuItem1.addActionListener(new MenuListenerSaveDir());
-		menuItem2Display.addActionListener(new MenuListenerDisplayCurrentDir());
-		menuItem3ClearDisplay.addActionListener(new MenuListenerClearDisplay());
-		menuItem4ListDirectory.addActionListener(new MenuListenerListDirectory());
-		menuItem5ListMp3Files.addActionListener(new MenuListenerListMp3Files());
-		frame.setJMenuBar(menuBar);
-		
-		textOut.setLineWrap(true);
-		JButton button=new JButton("Download");
-		button.setPreferredSize(new Dimension(100, 30));
-		button.addActionListener(new ButtonListener());	
-		panel.setLayout(new BorderLayout());//このコードがパネルのレイアウト変更には必要
-		panel.add(BorderLayout.NORTH,text);//"Youtube-DL Exteded Java Implementation by Masataka Nakamura"
-		panel.add(BorderLayout.SOUTH,textIn);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(BorderLayout.CENTER,scrollpane);
-		frame.getContentPane().add(BorderLayout.NORTH,panel);
-		frame.getContentPane().add(BorderLayout.SOUTH,button);
-		frame.setSize(800,600);
-		frame.setVisible(true);
-	}
-	//End of init()
+
 	
 	static void jls(String file) 
 	{

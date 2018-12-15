@@ -51,9 +51,9 @@ public class Main {
 		properties.list(System.out);
 		
 		
-		//from Id3Tagger
+/*		//from Id3Tagger
 		Id3Tagger gui=new Id3Tagger();
-		gui.initGuiId3Tagger();
+		gui.initGuiId3Tagger();*/
 
 	}
 
