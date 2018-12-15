@@ -34,27 +34,27 @@ public class Id3Tagger extends JFrame
 	
 	public void initGuiId3Tagger() 
 	{
-
+		/////////////////////////////////////////////////
+		TargetText="";
+		patternStr="\\-\\ ";
+		patternStrHead="'";
+		patternStrTail="\\.mp3";
+		//Compile patterns
+		Pattern pattern=Pattern.compile(patternStr);
+		Pattern patternHead=Pattern.compile(patternStrHead);
+		Pattern patternTail=Pattern.compile(patternStrTail);
+		//Initialize matchers
+		
+		Matcher matcher=pattern.matcher(TargetText);
+		Matcher matcherHead=patternHead.matcher(TargetText);
+		Matcher matcherTail=patternTail.matcher(TargetText);
 		try 
 		{
 			
 			File ydlMusicDir=JaydlePrototype.saveDirectory;
 			println("ydlMusicDir.exists() ? "+ydlMusicDir.exists());
 			println("");
-			/////////////////////////////////////////////////
-			TargetText="";
-			patternStr="\\-\\ ";
-			patternStrHead="'";
-			patternStrTail="\\.mp3";
-			//Compile patterns
-			Pattern pattern=Pattern.compile(patternStr);
-			Pattern patternHead=Pattern.compile(patternStrHead);
-			Pattern patternTail=Pattern.compile(patternStrTail);
-			//Initialize matchers
-			
-			Matcher matcher=pattern.matcher(TargetText);
-			Matcher matcherHead=patternHead.matcher(TargetText);
-			Matcher matcherTail=patternTail.matcher(TargetText);
+
 
 			///////////////////////////////////////////////
 			String[] ydlMusicDirString=ydlMusicDir.list(); //ファイルオブジェクトのリストメソッドをつかう

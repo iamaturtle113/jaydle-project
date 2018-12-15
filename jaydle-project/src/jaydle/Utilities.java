@@ -153,11 +153,8 @@ public class Utilities {
 				{
 					filteredFileList.add(contentFileOfDirectory[i]);
 				}
-			}
-			
-			// last statement of try
-			
-		}
+			}//rof
+		} //yrt
 		catch(Exception exc)
 		{
 			println("Exception occured at regexFilterFileArray.");

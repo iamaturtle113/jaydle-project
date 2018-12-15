@@ -10,36 +10,47 @@ import java.io.IOException;
 import java.util.Properties;
 
 
-public class Main {
+public class Main 
+{
 
-	public static void main(String[] args) {
+	public static void main(String[] args) 
+	{
 
 		// JaydleProto01SwingWorker guiApp=new JaydleProto01SwingWorker();
 		// BackgroundTask<Integer,String> bgt=new BackgroundTask<Integer,String>();
 		// guiApp.initGuiApp();
 		// bgt.execute();
 
-		EventQueue.invokeLater(new Runnable() {
+		EventQueue.invokeLater(new Runnable() 
+		{//Double Brace Initialization
 			@Override
-			public void run() {
+			public void run() 
+			{
 				new JaydlePrototype().initGuiApp();
 			}
 		});
-		try {
+		try 
+		{
 			File serFile = new File("jaydle.ser");
 			// If file exists, load past data and substitute to saveDirectory.
 			// else make file.
 
-			if (serFile.exists()) {
+			if (serFile.exists()) 
+			{
 				serObj = (saveDirClass) load(serFile);
 				saveDirectory = serObj.getPath();
 				println("Return of serObj.getPath().toString() " + serObj.getPath().toString());
-			} else {
+			} else 
+			{
 				serFile.createNewFile();
 			}
-		} catch (IOException exc) {
+		} 
+		catch (IOException exc) 
+		{
 			println("IOE");
-		} catch (ClassNotFoundException exc2) {
+		} 
+		catch (ClassNotFoundException exc2) 
+		{
 			println("CNFE");
 		}
 		println("Return of serObj.getPath().toString() " + serObj.getPath().toString());
