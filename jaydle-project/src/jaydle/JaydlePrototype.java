@@ -162,15 +162,6 @@ public class JaydlePrototype extends JFrame
 		  }
 	 }
 	
-	
-	
-
-	
-	
-	
-	
-
-
 
 	class ButtonListener implements ActionListener
 	{
@@ -216,11 +207,7 @@ public class JaydlePrototype extends JFrame
 				 {
 					 println("IOException, jaydle.ser around wrong...");
 				 }
-			//  label.setText(file.getName());
-			//  text2.setText(jcat2(file.getAbsolutePath()));
-			//  println(jcat2(file.getAbsolutePath()));
-			  //text.setText(file.getAbsolutePath());
-				}
+			}
 			 else if (retFileChooser == JFileChooser.CANCEL_OPTION)
 			 {
 			      //label.setText("キャンセルされました");
@@ -239,7 +226,8 @@ public class JaydlePrototype extends JFrame
 		public void actionPerformed(ActionEvent e)
 		{
 			println("Display current saving directory clicked!"); 
-			try{
+			try
+			{
 				//saveDirectory=pbNew.directory();
 					//println("saveDirectory is "+saveDirectory.toString()); This statement made error.
 				//saveDirectory.toString(); this also bad.
@@ -249,8 +237,6 @@ public class JaydlePrototype extends JFrame
 			    println("File type something null pointer.");
 				exc.printStackTrace();
 			}
-
-
 		}
 	}
 

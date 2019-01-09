@@ -133,7 +133,7 @@ public class Mp3FileProcessor {
 				
 				//println("");
 				//matcher.find() means found "\\-\\ "
-				if(matcher.find())
+				if(matcher.find())// \\-
 				{
 					//remove ' if filename has it at head
 					TargetTextNohead=matcherHead.replaceFirst("");// Need to store TargetText temporary

@@ -21,14 +21,6 @@ public class Main
 		// guiApp.initGuiApp();
 		// bgt.execute();
 
-		EventQueue.invokeLater(new Runnable() 
-		{//Double Brace Initialization
-			@Override
-			public void run() 
-			{
-				new JaydlePrototype().initGuiApp();
-			}
-		});
 		try 
 		{
 			File serFile = new File("jaydle.ser");
@@ -57,6 +49,16 @@ public class Main
 		// saveDirectory=new File(saveDirString);
 		// serObj.setPath(saveDirectory);
 		// serObj.setPath(serObj.getPath()); //saveDirSeriarizable
+		
+		EventQueue.invokeLater(new Runnable() 
+		{//Double Brace Initialization
+			@Override
+			public void run() 
+			{
+				new JaydlePrototype().initGuiApp();
+			}
+		});
+
 
 		Properties properties = System.getProperties();
 		properties.list(System.out);

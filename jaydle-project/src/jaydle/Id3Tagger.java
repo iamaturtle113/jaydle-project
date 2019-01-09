@@ -63,6 +63,7 @@ public class Id3Tagger extends JFrame
 			// Before ID3tag didn't treat file directory, just file name
 			Arrays.sort(ydlMusicDirString);
 			println(ydlMusicDirString.length);
+			//Initialize data for JTable
 			data=new Object[ydlMusicDirString.length][3];
 			//printList(ydlMusicDirString);
 			for (int i=0; i<ydlMusicDirString.length;i++) 
@@ -155,6 +156,7 @@ public class Id3Tagger extends JFrame
 					}//End of if (matcherTail.find())
 				n++;
 				}//End of for
+				n=0;
 		
 				//fileStore=new File(fileMp3.toString()+".backup");
 				//println(fileMp3.exists());

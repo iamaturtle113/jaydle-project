@@ -1,5 +1,6 @@
 package jaydle;
 import static jaydle.Utilities.println;
+import static jaydle.JaydlePrototype.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -163,7 +164,39 @@ public class Utilities {
 		return filteredFileList;
 	}// End of regexFilterFileArray
 	/////////////////////////////////////////////////////////////////////////
-	
+	//Returns List of filtered File objects
+		public static List<File> regexFilterList(List<File> fileList, String patternStr)
+		{
+			//Init List
+			List<File> filteredFileList=new ArrayList<File>();
+			try 
+			{
+				
+				//make pattern object
+				Pattern pattern=Pattern.compile(patternStr);
+				//cast List<File> to File[]
+				File[] contentFileOfDirectory=(File[])fileList.toArray(new File[fileList.size()]);
+				//make File[] of searchDirectory's files
+				//File[] contentFileOfDirectory=searchDirectory.listFiles();
+				Arrays.sort(contentFileOfDirectory);
+				
+				//make matcher object
+				for(int i=0;i<contentFileOfDirectory.length;i++)
+				{
+					Matcher matcher=pattern.matcher(contentFileOfDirectory[i].getName());
+					if(matcher.find())
+					{
+						filteredFileList.add(contentFileOfDirectory[i]);
+					}
+				}//rof
+			} //yrt
+			catch(Exception exc)
+			{
+				println("Exception occured at regexFilterList.");
+				exc.printStackTrace();
+			}
+			return filteredFileList;
+		}// End of regexFilterFileArray
 	/*
 	public void printDoubleDimentionArray()
 	{
@@ -179,7 +212,16 @@ public class Utilities {
 	//テスト用のメインメソッド
 	public static void main(String[] args) {
 		//jcat("/home/masa/test.txt");
-		jls("/home/masa");
+//		jls("/home/masa");
+		File dirMp3=new File("/home/masa/Public/workspace/Play");
+		List<File> mp3FilesList=new ArrayList<File>();
+		List<File> mp3FilesList2=new ArrayList<File>();
+		mp3FilesList=regexFilterFileArray(dirMp3,"\\.mp3");
+		printListFile(mp3FilesList);
+		mp3FilesList2=regexFilterList(mp3FilesList, "\\-");
+		printListFile(mp3FilesList2);
+		
 	}
+
 	
 }
