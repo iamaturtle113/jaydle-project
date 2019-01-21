@@ -1,4 +1,4 @@
-package jaydle;
+package etc;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +12,8 @@ import com.mpatric.mp3agic.Mp3File;
 import java.io.*;
 import static jaydle.Utilities.*;
 import static jaydle.BackgroundTask.*;
+
+import jaydle.JaydlePrototype;
 import jaydle.JaydlePrototype.*;
 /*
  * このクラスが何をしているか。

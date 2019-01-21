@@ -1,4 +1,4 @@
-package jaydle;
+package etc;
 import java.io.*;
 
 import com.mpatric.mp3agic.ID3v2;
