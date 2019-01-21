@@ -75,7 +75,7 @@ public class JaydlePrototype extends JFrame
 			 ));
 	 static String url;//="https://www.youtube.com/watch?v=FqVTzr3CfEg";
 	 static BackgroundTask bgt; //Child class of SwingWorker
-	 public static File saveDirectory; 
+	 public  static File saveDirectory; 
 	 static ProcessBuilder pbNew;
 	 static String saveDirString=System.getProperty("user.home");//use home dir
 	 public static saveDirClass serObj=new saveDirClass();
