@@ -1,5 +1,7 @@
 package jaydle;
 import static jaydle.Utilities.println;
+import static jaydle.Utilities.regexFilterFileArray;
+import static jaydle.Utilities.regexFilterList;
 import static jaydle.JaydlePrototype.*;
 
 import java.io.*;
@@ -209,6 +211,36 @@ public class Utilities {
 		}
 	}
 */
+		/*
+		 * Rename mp3 filename which has "'" at the head of filename, discard this.
+		 */
+	    public static void cutFirstQuotation(File dirContainsMp3)
+	    {
+	    	//Filter files which are start from ' and mp3 files
+	        List<File> mp3FilesList=regexFilterFileArray(dirContainsMp3,"\\.mp3$");
+	        List<File> mp3FilesList2=regexFilterList(mp3FilesList, "^'");
+	        
+	        //Rename, cut down quotation
+	        try
+	        {
+	            for (File filteredFiles:mp3FilesList2)
+	            {
+	                String baseName=filteredFiles.getName();
+	                if(baseName.charAt(0)=='\'')
+	                {
+	                    baseName=baseName.replaceFirst("'", "");
+	                }
+	                File newFileName=new File(filteredFiles.getParent()+"/"+baseName);
+	                println(newFileName.getName());
+	            	filteredFiles.renameTo(newFileName);
+	            }
+	        }
+	        catch(Exception exc)
+	        {
+	            println("Exception caught"+exc);
+	        }
+	    }
+	    
 	//テスト用のメインメソッド
 	public static void main(String[] args) {
 		//jcat("/home/masa/test.txt");
