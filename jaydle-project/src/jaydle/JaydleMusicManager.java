@@ -1,6 +1,8 @@
 package jaydle;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,10 +14,8 @@ import javax.swing.*;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
 
-import static jaydle.Utilities.printListFile;
-import static jaydle.Utilities.println;
-import static jaydle.Utilities.regexFilterFileArray;
-import static jaydle.Utilities.regexFilterList;
+import jaydle.JaydlePrototype.ButtonListener;
+
 import static jaydle.Utilities.*;
 import static jaydle.JaydlePrototype.*;
 import static jaydle.BackgroundTask.*;
@@ -26,76 +26,73 @@ public class JaydleMusicManager
 	/*
 	 * 
 	 */
-	static File dirMp3=new File("/media/masa/Share/Music/ydlAudio/");
-	static List<File> mp3FilesList=regexFilterFileArray(dirMp3,"\\.mp3");
+	static JaydleMusicManager gui=new JaydleMusicManager();
+	// comment out are for filechooser implementation
+	static File dirMp3;//=new File("/media/masa/Share/Music/ydlAudio/");
+	static File dirMp3Initial=new File("/media/masa/Share/Music/ydlAudio/");
+	static File destination;
+	static List<File> mp3FilesList;//=regexFilterFileArray(dirMp3,"\\.mp3");
+	static List<File> taggedMp3FilesList;
 	
 	//GUI components
 	//static JFrame frame = new JFrame("ID3Tagger");
 	static JFrame frameTagger = new JFrame("ID3Tagger");
 	static JTextArea jTextArea=new JTextArea();
-	static JPanel panelTagger =new JPanel();
+	//static JPanel panelTagger =new JPanel();
+	static JPanel panelButton =new JPanel();
+	static JButton executeButton=new JButton("Execute");
+	static JButton taggingButton=new JButton("Auto Tagging");
+	static JButton cutQuotationButton=new JButton("Cut ' of the head");
+	static JButton moveTaggedItemsButton=new JButton("Move tagged items");
 	private boolean DEBUG = true;	
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public void initGuiId3Tagger() 
 	{
-
-		try 
-		{
-		
-			//Initialize data for JTable
-			//Item number * 3 row (filename,artist id,title)
-
-			data=new Object[mp3FilesList.size()][3];
-			//printList(ydlMusicDirString);
-			
-			//For for statement
-			int i=0;
-			for (File mp3:mp3FilesList) 
-			{
-				//Editting source code changed var name i to ydlMusicDirString[i]
-				//and it's content file name to absolute path
-                Mp3File mp3file=new Mp3File(mp3); 
-                ID3v2 v2Tag=mp3file.getId3v2Tag();
-                
-				/*
-				 * Make Object[][] for JTable
-				 */
-				dataRow=new Object[]{mp3.getName(),
-						v2Tag.getArtist(),
-						v2Tag.getTitle(),
-						};
-				data[i]=dataRow;
-
-                println("v2Tag.getArtist() "+v2Tag.getArtist());	// Saving not yet
-                println("v2Tag.getTitle() "+v2Tag.getTitle());
-
-                println("");
-                i++;
-			}//End of for
-	
-			printDoubleDimentionArray();
-			
-			println("");
-			
-		}	// End of Try	
-		catch(Exception exc)
-		{
-			println("Exception caught"+exc);
-			
-		}
-		
-		JTable jTable=new JTable(data,columnNames);
+		JTable jTable=new JTable(data,columnNames);//data is two dimensional array
 		JScrollPane scrollpane4JTable=new JScrollPane(jTable);
+		panelButton.add(cutQuotationButton);
+		panelButton.add(taggingButton);
+		panelButton.add(executeButton);
+		panelButton.add(moveTaggedItemsButton);
+		taggingButton.addActionListener(new taggingButtonListener());	
+		cutQuotationButton.addActionListener(new cutQuotationButtonListener());
+		executeButton.addActionListener(new executionButtonListener());
+		moveTaggedItemsButton.addActionListener(new moveTaggedItemsButtonListener());
 		frameTagger.getContentPane().add(BorderLayout.NORTH,scrollpane4JTable);
+		frameTagger.getContentPane().add(BorderLayout.EAST,panelButton);
 		//frameTagger.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frameTagger.getContentPane().add(panelTagger);
-		frameTagger.setSize(800,600);
+		//frameTagger.getContentPane().add(panelTagger);
+		frameTagger.setSize(900,700);
 		frameTagger.setVisible(true);
 	}
 	
-	public void printDoubleDimentionArray()
+	public static void initTable()
+	{
+		makeMp3TagTable3Rows(mp3FilesList);
+		printDoubleDimentionArray();
+		println("");
+	}
+	
+	public void initTable2()
+	{
+		makeMp3TagTable3RowsAndTagging(mp3FilesList);
+		printDoubleDimentionArray();
+		println("");
+	}
+	
+	public void initTable3()
+	{
+		makeMp3TagTable3RowsAndTaggingExecute(mp3FilesList,dirMp3);
+		printDoubleDimentionArray();
+		println("");
+	}
+
+	
+
+	
+	public static void printDoubleDimentionArray()
 	{
 		for(int i=0;i<data.length;i++)
 		{
@@ -106,11 +103,73 @@ public class JaydleMusicManager
 		}
 	}
 	
+	class cutQuotationButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			cutFirstQuotation(mp3FilesList);
+			mp3FilesList=regexFilterFileArray(dirMp3,"\\.mp3$");
+			gui.initGuiId3Tagger();
+					
+		}
+	}
+
+	
+	class taggingButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			mp3FilesList=regexFilterList(mp3FilesList,"\\ -\\ ");
+			initTable2();
+			gui.initGuiId3Tagger();
+					
+		}
+	}
+	
+	class executionButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			mp3FilesList=regexFilterList(mp3FilesList,"\\ -\\ ");
+			initTable3();
+			gui.initGuiId3Tagger();
+					
+		}
+	}
+	
+	class moveTaggedItemsButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+	    	JFileChooser filechooser=new JFileChooser(dirMp3Initial);
+			filechooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int retFileChooser=filechooser.showOpenDialog(frameTagger);
+			if (retFileChooser == JFileChooser.APPROVE_OPTION)
+			 {
+				 destination=filechooser.getSelectedFile();
+			//	 taggedMp3FilesList=filterTaggedMp3List(dirMp3);
+			 }
+			//moveTaggedItem(taggedMp3FilesList,destination);
+			gui.initGuiId3Tagger();
+					
+		}
+	}
+	
     public static void main(String[] args) 
     {
-    	//cutFirstQuotation(dirMp3);
-		JaydleMusicManager gui=new JaydleMusicManager();
+    	JFileChooser filechooser=new JFileChooser(dirMp3Initial);
+		filechooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		int retFileChooser=filechooser.showOpenDialog(frameTagger);
+		//https://www.javadrive.jp/tutorial/jfilechooser/index2.html
+		//からコピペ
+		 if (retFileChooser == JFileChooser.APPROVE_OPTION)
+		 {
+			 dirMp3 = filechooser.getSelectedFile();
+			 mp3FilesList=regexFilterFileArray(dirMp3,"\\.mp3$");
+		 }
+		initTable();
 		gui.initGuiId3Tagger();
+
     }
 
  // do at Main.java

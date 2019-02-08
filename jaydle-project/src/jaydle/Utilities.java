@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.Mp3File;
+
 public class Utilities {
 	
 	public static void print(Object a){
@@ -240,6 +243,194 @@ public class Utilities {
 	            println("Exception caught"+exc);
 	        }
 	    }
+	    
+	    public static void cutFirstQuotation(List<File> mp3FilesList)
+	    {
+	        //Rename, cut down quotation
+	        try
+	        {
+	            for (File filteredFiles:mp3FilesList)
+	            {
+	                String baseName=filteredFiles.getName();
+	                if(baseName.charAt(0)=='\'')
+	                {
+	                    baseName=baseName.replaceFirst("'", "");
+	                }
+	                File newFileName=new File(filteredFiles.getParent()+"/"+baseName);
+	                println(newFileName.getName());
+	            	filteredFiles.renameTo(newFileName);
+	            }
+	        }
+	        catch(Exception exc)
+	        {
+	            println("Exception caught"+exc);
+	        }
+	    }
+	    
+		public static Object[] makeMp3TagTable3Rows(List<File> fileList)
+		{		
+			try 
+			{
+			
+			//Initialize data for JTable
+			//Item number * 3 rows (filename,artist id,title)
+			data=new Object[fileList.size()][3];
+			//For for statement
+			int i=0;
+
+	            for (File mp3:fileList) 
+	            {
+	                //Editting source code changed var name i to ydlMusicDirString[i]
+	                //and it's content file name to absolute path
+	                Mp3File mp3file=new Mp3File(mp3); 
+	                ID3v2 v2Tag=mp3file.getId3v2Tag();
+	                
+	                /*
+	                 * Make Object[][] for JTable
+	                 */
+	                dataRow=new Object[]{mp3.getName(),
+	                        v2Tag.getArtist(),
+	                        v2Tag.getTitle(),
+	                        };
+	                data[i]=dataRow;
+
+	                println("v2Tag.getArtist() "+v2Tag.getArtist());	// Saving not yet
+	                println("v2Tag.getTitle() "+v2Tag.getTitle());
+
+	                println("");
+	                i++;
+	            }//End of for
+
+			println("");
+			
+	        }	// End of Try	
+	        catch(Exception exc)
+	        {
+	            println("Exception caught"+exc);
+	        }
+			return data;
+			
+		}
+		
+		public static Object[] makeMp3TagTable3RowsAndTagging(List<File> fileList)
+		{		
+			try 
+			{
+			
+			//Initialize data for JTable
+			//Item number * 3 rows (filename,artist id,title)
+			data=new Object[fileList.size()][3];
+			//For for statement
+			int i=0;
+
+	            for (File mp3:fileList) 
+	            {
+	                //Editting source code changed var name i to ydlMusicDirString[i]
+	                //and it's content file name to absolute path
+	                Mp3File mp3file=new Mp3File(mp3); 
+	                ID3v2 v2Tag=mp3file.getId3v2Tag();
+	                String[] stringArrayForTag=splitToArtistAndTitle(mp3.getName(), "\\ -\\ ");
+	        		v2Tag.setArtist(stringArrayForTag[0]);
+					v2Tag.setTitle(stringArrayForTag[1]);
+	                /*
+	                 * Make Object[][] for JTable
+	                 */
+	                dataRow=new Object[]{mp3.getName(),
+	                        v2Tag.getArtist(),
+	                        v2Tag.getTitle(),
+	                        };
+	                data[i]=dataRow;
+
+	                println("v2Tag.getArtist() "+v2Tag.getArtist());	// Saving not yet
+	                println("v2Tag.getTitle() "+v2Tag.getTitle());
+
+	                println("string of mp3 object"+mp3);
+	                i++;
+	            }//End of for
+
+			println("");
+			
+	        }	// End of Try	
+	        catch(Exception exc)
+	        {
+	            println("Exception caught"+exc);
+	        }
+			return data;
+			
+		}
+		
+		public static Object[] makeMp3TagTable3RowsAndTaggingExecute(List<File> fileList,File dirMp3)
+		{		
+			try 
+			{
+			
+			//Initialize data for JTable
+			//Item number * 3 rows (filename,artist id,title)
+			data=new Object[fileList.size()][3];
+			//For for statement
+			int i=0;
+
+	            for (File mp3:fileList) 
+	            {
+	                //Editting source code changed var name i to ydlMusicDirString[i]
+	                //and it's content file name to absolute path
+	                Mp3File mp3file=new Mp3File(mp3); 
+	                ID3v2 v2Tag=mp3file.getId3v2Tag();
+	                String[] stringArrayForTag=splitToArtistAndTitle(mp3.getName(), "\\ -\\ ");
+	        		v2Tag.setArtist(stringArrayForTag[0]);
+					v2Tag.setTitle(stringArrayForTag[1]);
+	                /*
+	                 * Make Object[][] for JTable
+	                 */
+	                dataRow=new Object[]{mp3.getName(),
+	                        v2Tag.getArtist(),
+	                        v2Tag.getTitle(),
+	                        };
+	                data[i]=dataRow;
+
+	                println("v2Tag.getArtist() "+v2Tag.getArtist());	// Saving not yet
+	                println("v2Tag.getTitle() "+v2Tag.getTitle());
+	    			v2Tag.setArtist(stringArrayForTag[0]);
+					v2Tag.setTitle(stringArrayForTag[1]);
+	                mp3file.save(dirMp3.toString()+"/new "+mp3.getName());
+	                File fileMp3New=new File(dirMp3.toString()+"/new "+mp3.getName());
+					if(fileMp3New.exists())
+					{
+						println("fileMp3New = "+fileMp3New.toString()+" exists.");
+						mp3.delete();
+						fileMp3New.renameTo(mp3);
+					}
+	                println("string of mp3 object"+mp3);
+	                i++;
+	            }//End of for
+
+			println("");
+			
+	        }	// End of Try	
+	        catch(Exception exc)
+	        {
+	            println("Exception caught"+exc);
+	        }
+			return data;
+			
+		}
+		//Split artist name and title
+		public static String[] splitToArtistAndTitle(String filename,String regex)
+		{
+			String[] stringArrayForTag;
+//			try 
+//			{
+				//make pattern object
+				Pattern pattern=Pattern.compile(regex);
+				//Matcher matcher=pattern.matcher(filename);
+				stringArrayForTag=pattern.split(filename);
+//			}
+//	        catch(Exception exc)
+//	        {
+//	            println("Exception caught"+exc);
+//	        }
+			return stringArrayForTag;
+		}
 	    
 	//テスト用のメインメソッド
 	public static void main(String[] args) {
