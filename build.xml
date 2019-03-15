@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="jaydle-project" basedir="." default="Main Build">
+    <property name="bin"     	location="bin"/>
+    <property name="src"     	location="src"/>
+	<property name="srcdir"     location="${src}/jaydle"/>
+	<property name="resources"  location="resources"/>
+    <property name="jardir"   	location="jar"/>
+    <property name="jarjaydledl" location="${jardir}/JaydleDownloader.jar"/>
+    <property name="jarjaydlemm" location="${jardir}/JaydleMusicManager.jar"/>
+    <property name="main-class"  location="Main"/>
+	
+	 
+	<path id="classpath">
+	        <fileset dir="${resources}" includes="**/*.jar"/>
+	    </path>
+	
+    <typedef name="ecj" classname="org.eclipse.jdt.core.JDTCompilerAdapter">
+         <classpath>
+              <fileset dir="ant-lib" includes="*.jar" />
+         </classpath>
+    </typedef>
+	
+    <target name = "Main Build" depends="Initialize,Compile">
+        <echo message = "Ant at work!" />
+    </target>
+	
+	<target name="Initialize">
+		<delete dir="${bin}"/>
+		<delete dir="${jardir}"/>
+		<mkdir dir="${bin}"/>
+		<mkdir dir="${jardir}"/>
+	</target>
+	
+	<target name="Compile" depends="Initialize">
+		<javac 
+			classpathref="classpath" 
+			srcdir="${src}" 
+			destdir="${bin}" 
+			compiler="org.eclipse.jdt.core.JDTCompilerAdapter"
+			
+			includeantruntime="false"
+	        source="1.8"
+	        target="1.8"
+			fork="true"  
+			debug="true" 
+			>
+			<compilerarg value="-Xdiags:verbose"/>
+			</javac>
+	</target>
+	
+	
+</project>
