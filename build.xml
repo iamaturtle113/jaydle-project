@@ -19,10 +19,7 @@
               <fileset dir="ant-lib" includes="*.jar" />
          </classpath>
     </typedef>
-	
-    <target name = "Main Build" depends="Initialize,Compile">
-        <echo message = "Ant at work!" />
-    </target>
+
 	
 	<target name="Initialize">
 		<delete dir="${bin}"/>
@@ -47,6 +44,21 @@
 			<compilerarg value="-Xdiags:verbose"/>
 			</javac>
 	</target>
+	
+    <target name="MakeJar">
+        <jar destfile="jar/Jaydle.jar" basedir="bin">
+            <manifest>
+                <attribute name="Main-Class" value="jaydle.Main"/>
+            </manifest>
+        </jar>
+    </target>
+	
+	
+    <target name = "Main Build" depends="Initialize,Compile,MakeJar">
+        <echo message = "Ant at work!" />
+    </target>
+	
+	
 	
 	
 </project>
