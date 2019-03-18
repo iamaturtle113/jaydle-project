@@ -5,8 +5,8 @@
 	<property name="srcdir"     location="${src}/jaydle"/>
 	<property name="resources"  location="resources"/>
     <property name="jardir"   	location="jar"/>
-    <property name="jarjaydledl" location="${jardir}/JaydleDownloader.jar"/>
-    <property name="jarjaydlemm" location="${jardir}/JaydleMusicManager.jar"/>
+    <property name="jaydlejar" location="${jardir}/Jaydle.jar"/>
+    <property name="jaydlemmjar" location="${jardir}/JaydleMusicManager.jar"/>
     <property name="main-class"  location="Main"/>
 	
 	 
@@ -46,15 +46,24 @@
 	</target>
 	
     <target name="MakeJar">
-        <jar destfile="jar/Jaydle.jar" basedir="bin">
+        <jar destfile="${jaydlejar}" basedir="bin">
             <manifest>
                 <attribute name="Main-Class" value="jaydle.Main"/>
             </manifest>
         </jar>
+        <jar destfile="${jaydlemmjar}" basedir="bin">
+            <manifest>
+                <attribute name="Main-Class" value="jaydle.JaydleMusicManager"/>
+            </manifest>
+        </jar>
     </target>
 	
+    <target name="Run">
+ <java jar="${jaydlejar}" fork="true"/>
+ <java jar="${jaydlemmjar}" fork="true"/>
+    </target>
 	
-    <target name = "Main Build" depends="Initialize,Compile,MakeJar">
+    <target name = "Main Build" depends="Initialize,Compile,MakeJar,Run">
         <echo message = "Ant at work!" />
     </target>
 	
