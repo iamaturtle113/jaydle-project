@@ -64,7 +64,7 @@
     </target>
 	
     <target name = "Main Build" depends="Initialize,Compile,MakeJar,Run">
-        <echo message = "Ant at work!" />
+        <echo message = "Thank you for using Jaydle, appreciate! Have Fun!!!" />
     </target>
 	
 	

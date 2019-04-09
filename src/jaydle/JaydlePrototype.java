@@ -39,9 +39,11 @@ public class JaydlePrototype extends JFrame
 	 static JTextField textIn=new JTextField(initText);
 	 static JPanel panel =new JPanel();
 	 static String strIn=null;
+	// static String path = JaydlePrototype.class.getProtectionDomain().getCodeSource().getLocation().getPath(); 
+	 //static String ydl= (path+"/resources/youtube-dl");
 	 static List<String> cmdList= new ArrayList<>
 	 (Arrays.asList(
-			 "youtube-dl",
+			 "youtube-dl",// made of path variable and relative path 
 			 "--no-playlist",
 			 "--extract-audio",
 			 "--audio-format",
