@@ -1,4 +1,5 @@
 /bin/
+<<<<<<< HEAD
 build-auto-by-eclipse-export.xml
 Build.class
 Build.java
@@ -7,3 +8,9 @@ hs_err_pid25401.log
 /.settings/
 jaydle.ser
 .classpath
+=======
+
+.settings/
+.classpath
+.project
+>>>>>>> refs/remotes/origin/master
