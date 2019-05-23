@@ -5,5 +5,8 @@ Build.java
 hs_err_pid25401.log
 .project
 /.settings/
+
 jaydle.ser
 .classpath
+/.metadata/
+/.git/
