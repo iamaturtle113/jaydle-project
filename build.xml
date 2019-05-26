@@ -41,6 +41,7 @@
 			fork="true"  
 			debug="true" 
 			>
+			<ecj />
 			<compilerarg value="-Xdiags:verbose"/>
 			</javac>
 	</target>
